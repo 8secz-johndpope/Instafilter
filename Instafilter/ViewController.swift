@@ -51,9 +51,7 @@ class ViewController: UIViewController {
 
   @IBAction func saveButtonTapped(_ sender: UIButton) {
     guard let image = imageView.image else {
-      let ac = UIAlertController(title: "No Image!", message: "There is any image to save, add one and start adding filters to it before save", preferredStyle: .alert)
-      ac.addAction(UIAlertAction(title: "Ok", style: .default))
-      present(ac, animated: true)
+      showNoImageErrorAlert()
       return
     }
 
@@ -75,6 +73,7 @@ class ViewController: UIViewController {
 
   func applyProcessing() {
     let inputKeys = currentFilter.inputKeys
+    title = currentFilter.name
 
     if inputKeys.contains(kCIInputIntensityKey) {
       currentFilter.setValue(intensitySlider.value, forKey: kCIInputIntensityKey)
@@ -104,7 +103,10 @@ class ViewController: UIViewController {
 
   func setFilter(action: UIAlertAction) {
     // make sure we have a valid image before continuing!
-    guard currentImage != nil else { return }
+    guard currentImage != nil else {
+      showNoImageErrorAlert()
+      return
+    }
 
     // safely read the alert action's title
     guard let actionTitle = action.title else { return }
@@ -128,6 +130,12 @@ class ViewController: UIViewController {
       ac.addAction(UIAlertAction(title: "OK", style: .default))
       present(ac, animated: true)
     }
+  }
+
+  func showNoImageErrorAlert() {
+    let ac = UIAlertController(title: "No Image!", message: "There is any image to save, add one and start adding filters to it before save", preferredStyle: .alert)
+    ac.addAction(UIAlertAction(title: "Ok", style: .default))
+    present(ac, animated: true)
   }
 }
 
