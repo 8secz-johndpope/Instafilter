@@ -11,3 +11,8 @@ Make a photo manipulation program using Core Image filters and a UISlider.
 | Screenshot 01 |
 | ------------- |
 | ![screenshot01.png](.screenshots/screenshot01.png) |
+
+### feature/importing-a-picture
+| Screenshot 02 | Screenshot 03 |
+| ------------- | ------------- |
+| ![screenshot02.png](.screenshots/screenshot02.png) | ![screenshot03.png](.screenshots/screenshot03.png) |

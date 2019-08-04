@@ -15,11 +15,16 @@ class ViewController: UIViewController {
   @IBOutlet var imageView: UIImageView!
   @IBOutlet var intensitySlider: UISlider!
 
+  // MARK: - Properties
+
+  var currentImage: UIImage!
+
   // MARK: - View Lifecycle
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view.
+    title = "Instafilter (YACIFP)"
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(importPicture))
   }
 
   // MARK: - Actions
@@ -36,5 +41,25 @@ class ViewController: UIViewController {
 
   }
 
+  // MARK: - Methods
+
+  @objc func importPicture() {
+    let picker = UIImagePickerController()
+    picker.allowsEditing = true
+    picker.delegate = self
+    present(picker, animated: true)
+  }
+}
+
+// MARK: - Image Picker Controller Delegate
+
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    guard let image = info[.editedImage] as? UIImage else { return }
+    dismiss(animated: true)
+
+    currentImage = image
+  }
 }
 
