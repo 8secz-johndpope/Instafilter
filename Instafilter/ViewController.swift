@@ -15,6 +15,11 @@ class ViewController: UIViewController {
 
   @IBOutlet var imageView: UIImageView!
   @IBOutlet var intensitySlider: UISlider!
+  @IBOutlet var radiusSlider: UISlider!
+  @IBOutlet var scaleSlider: UISlider!
+  @IBOutlet var intensityStackView: UIStackView!
+  @IBOutlet var radiusStackView: UIStackView!
+  @IBOutlet var scaleStackView: UIStackView!
 
   // MARK: - Properties
 
@@ -32,6 +37,8 @@ class ViewController: UIViewController {
     // Filtering
     context = CIContext() // creates a default core image context
     currentFilter = CIFilter(name: "CISepiaTone") // creates an example filter that will apply a sepia tone to images
+
+    setupView()
   }
 
   // MARK: - Actions
@@ -58,11 +65,21 @@ class ViewController: UIViewController {
     UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
   }
 
-  @IBAction func intensitySliderValueChanged(_ sender: UISlider) {
+  @IBAction func sliderValueChanged(_ sender: UISlider) {
     applyProcessing()
   }
 
   // MARK: - Methods
+
+  func setupView() {
+    intensityStackView.isHidden = true
+    radiusStackView.isHidden = true
+    scaleStackView.isHidden = true
+
+    intensitySlider.isEnabled = false
+    radiusSlider.isEnabled = false
+    scaleSlider.isEnabled = false
+  }
 
   @objc func importPicture() {
     let picker = UIImagePickerController()
@@ -76,15 +93,30 @@ class ViewController: UIViewController {
     title = currentFilter.name
 
     if inputKeys.contains(kCIInputIntensityKey) {
+      intensityStackView.isHidden = false
+      intensitySlider.isEnabled = true
       currentFilter.setValue(intensitySlider.value, forKey: kCIInputIntensityKey)
+    } else {
+      intensityStackView.isHidden = true
+      intensitySlider.isEnabled = false
     }
 
     if inputKeys.contains(kCIInputRadiusKey) {
-      currentFilter.setValue(intensitySlider.value * 200, forKey: kCIInputRadiusKey)
+      radiusStackView.isHidden = false
+      radiusSlider.isEnabled = true
+      currentFilter.setValue(radiusSlider.value, forKey: kCIInputRadiusKey)
+    } else {
+      radiusStackView.isHidden = true
+      radiusSlider.isEnabled = false
     }
 
     if inputKeys.contains(kCIInputScaleKey) {
-      currentFilter.setValue(intensitySlider.value * 10, forKey: kCIInputScaleKey)
+      scaleStackView.isHidden = false
+      scaleSlider.isEnabled = true
+      currentFilter.setValue(scaleSlider.value, forKey: kCIInputScaleKey)
+    } else {
+      scaleStackView.isHidden = true
+      scaleSlider.isEnabled = false
     }
 
     if inputKeys.contains(kCIInputCenterKey) {
