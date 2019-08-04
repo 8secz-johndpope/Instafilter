@@ -50,7 +50,12 @@ class ViewController: UIViewController {
   }
 
   @IBAction func saveButtonTapped(_ sender: UIButton) {
-    guard let image = imageView.image else { return }
+    guard let image = imageView.image else {
+      let ac = UIAlertController(title: "No Image!", message: "There is any image to save, add one and start adding filters to it before save", preferredStyle: .alert)
+      ac.addAction(UIAlertAction(title: "Ok", style: .default))
+      present(ac, animated: true)
+      return
+    }
 
     UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
   }
