@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     title = "Instafilter (YACIFP)"
     navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(importPicture))
+    imageView.alpha = 0.0
 
     // Filtering
     context = CIContext() // creates a default core image context
@@ -82,6 +83,9 @@ class ViewController: UIViewController {
   }
 
   @objc func importPicture() {
+    UIView.animate(withDuration: 0.5, delay: 0, options: [], animations: { [weak self] in
+      self?.imageView.alpha = 0.0
+    }, completion: nil)
     let picker = UIImagePickerController()
     picker.allowsEditing = true
     picker.delegate = self
@@ -130,6 +134,12 @@ class ViewController: UIViewController {
     if let cgimg = context.createCGImage(currentFilter.outputImage!, from: currentFilter.outputImage!.extent) {
       let processedImage = UIImage(cgImage: cgimg) // it creates a new 'UIImage' from the 'CGImage'
       imageView.image = processedImage // assign the 'UIImage' to our 'UIImageView'
+    }
+
+    if imageView.alpha.isZero {
+      UIView.animate(withDuration: 2.0, delay: 5.0, options: [], animations: { [weak self] in
+        self?.imageView.alpha = 1.0
+        }, completion: nil)
     }
   }
 
@@ -185,6 +195,13 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     currentFilter.setValue(beginImage, forKey: kCIInputImageKey) // send the result into the current core image filter
 
     applyProcessing()
+  }
+
+  func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    dismiss(animated: true)
+    UIView.animate(withDuration: 2.0, delay: 0, options: [], animations: { [weak self] in
+      self?.imageView.alpha = 1.0
+    }, completion: nil)
   }
 }
 
